@@ -9,7 +9,7 @@ def ma_rotation(list)
   longueur = list.length
   (0..longueur).each do |i|
     if i != longueur
-      sorted_list[(i + 1) % longueur] = list[i]
+      sorted_list[(i - 1) % (longueur + 1)] = list[i]
     end
   end
   sorted_list
