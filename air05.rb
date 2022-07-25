@@ -3,13 +3,13 @@
 
 # LES FONCTIONS
 # -------------
-def make_operation(tableau, operation)
+def make_operation(tableau, operator)
   new_tableau = []
   (0..(tableau.length - 2)).each do |i|
-    if operation[0] == "+"
-      new_tableau.append(tableau[i].to_i + operation[1].to_i)
+    if operator[0] == "+"
+      new_tableau.append(tableau[i].to_i + operator[1].to_i)
     else
-      new_tableau.append(tableau[i].to_i - operation[1].to_i)
+      new_tableau.append(tableau[i].to_i - operator[1].to_i)
     end
   end
   new_tableau
@@ -34,7 +34,7 @@ operation = ARGV[-1]
 
 # LA RESOLUTION
 # -------------
-result = make_operation(tableau, operation)
+result = make_operation(tableau, operator)
 # -------------
 
 
