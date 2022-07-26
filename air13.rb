@@ -1,53 +1,53 @@
 # Créez un programme qui vérifie si les exercices de votre épreuve de l’air sont présents
 # dans le répertoire et qu’ils fonctionnent (sauf celui là).
 # Créez au moins un test pour chaque exercice.
-require 'colorize'
+require 'colorize' # Permet de colorier le text du terminal grace à la gem 'colorize'
 
 # LES FONCTIONS
 # -------------
-def if_exist file_name
-  return File.exists?(file_name)
+
+# Verifie l'existence du fichier dans le dossier courant
+#
+# @param [String] file_name Nom du fichier dont on souhaite verifier l'existence
+# @return [Boolean] 'True' le fichier existe, 'False' il n'existe pas
+def if_exist(file_name)
+  File.exists?(file_name)
 end
 
+# Execution d'un test de fichier avec passage ou pas de paramètres
+#
+# @param [String] file_name Le nom du fichier que l'on doit tester
+# @param [string] params Les paramètres à passer au fichier
+# @param [String] expected La valeur de retour attendu
+# @return [Array] array[0]:Boolean si on a le retour attendu; array[1]:le resulat obtenu; array[2]:Le resultat attendu
 def test_file(file_name, params, expected)
   result =  %x{ruby #{file_name} #{params}}
-  return [result == expected, result.inspect, expected.inspect]
+  [result == expected, result.inspect, expected.inspect]
 end
 
-def test_exo(note_table, name_exo, data)
-  the_return = ''
-  expected = ''
-  file_name = name_exo + '.rb'
-  total_exo = data.length - 1
-  (0..total_exo).each do |i|
-    case data[i][0]
-    when 'exist'
-      result_exo = if_exist(file_name)
-    when 'test'
-      if File.exists?(file_name)
-        result_exo = test_file(file_name, data[i][1], data[i][2])[0]
-        the_return = test_file(file_name, data[i][1], data[i][2])[1]
-        expected = test_file(file_name, data[i][1], data[i][2])[2]
-      else
-        result_exo = false
-        the_return = "Impossible d'effectuer le test car le fichier est introuvable"
-        expected = ''
-      end
-    end
-    show(note_table,result_exo, name_exo, i + 1, total_exo + 1, the_return, expected)
-  end
-end
-
-def show_final_result note_table
+# Affiche les resutats globaux des tests
+#
+# @param [Array] note_table note_table[0]: la note générale;  note_table[1]: le total général
+def show_final_result(note_table)
   puts ''
-  if note_table[0] >= (note_table[1]/2.0)
-    puts "Total success:"+" (#{note_table[0]}/#{note_table[1]})".green + "\n\nSoit " + "#{((note_table[0] * 100)/(note_table[1] * 1.0)).round(2)}%".green + " de reussite aux épreuves\n\n\n"
+  if note_table[0] >= (note_table[1] / 2.0)
+    puts "Total success:" + " (#{note_table[0]}/#{note_table[1]})".green + "\n\nSoit " + "#{((note_table[0] * 100) / (note_table[1] * 1.0)).round(2)}%".green + " de reussite aux épreuves\n\n\n"
   else
-    puts "Total success:"+" (#{note_table[0]}/#{note_table[1]})".red + "\n\nSoit " + "#{((note_table[0] * 100)/(note_table[1] * 1.0)).round(2)}%".red + " de reussite aux épreuves\n\n\n"
+    puts "Total success:" + " (#{note_table[0]}/#{note_table[1]})".red + "\n\nSoit " + "#{((note_table[0] * 100) / (note_table[1] * 1.0)).round(2)}%".red + " de reussite aux épreuves\n\n\n"
   end
 end
 
-def show(note_table,result_exo, nom_exo, num_exo, total_exo, the_return = '', expected = '')
+# Affiche le resultat du test dans la console du terminal.
+#
+# @param [Array] note_table tableau contenant a l'indice 0 la note actuelle et en indice 1 le total de tests effectués
+# @param [Boolean] result_exo Resultat du test 'True' si c'est reussit, 'False' si le test a échoué
+# @param [String] nom_exo Nom de l'exercice
+# @param [String] num_exo Numero de l'exercice
+# @param [String] total_exo Nombre d'exercice de la serie
+# @param [String] the_return Valeur retourné par la fonction testé
+# @param [String] expected Valeur de retour attendu après exécution du test
+# @return [Array] tableau de note mise à jour
+def show(note_table, result_exo, nom_exo, num_exo, total_exo, the_return = '', expected = '')
   note_table[1] += 1
   if result_exo
     note_table[0] += 1
@@ -63,7 +63,7 @@ def show(note_table,result_exo, nom_exo, num_exo, total_exo, the_return = '', ex
         end
       end
     else
-      (0..(expected.length - 1)).each do |i|
+      (0..(the_return.length - 1)).each do |i|
         if expected[i] == the_return[i]
           the_return_colored += the_return[i].green
         else
@@ -80,10 +80,48 @@ def show(note_table,result_exo, nom_exo, num_exo, total_exo, the_return = '', ex
       puts "#{nom_exo} (#{num_exo}/#{total_exo}) :"+" failure".red + "    -    expected: " +"#{expected.blue}" + "  reçu: "+ the_return_colored
     end
   end
-  return note_table
+  note_table
 end
 
-def my_exercise_result (num_test = '')
+# Execute une serie de test
+#
+# @param [Array] note_table tableau de note avec en premier paramètre la note et en second le total
+# @param [String] name_exo nom de l'exercice
+# @param [Array] data les données de l'exercice pour le test
+# @return [Array] tableau des notes mis à jour
+def test_exo(note_table, name_exo, data)
+  the_return = ''
+  expected = ''
+  file_name = name_exo + '.rb'
+  total_exo = data.length - 1
+  (0..total_exo).each do |i|
+    result_exo = ''
+    case data[i][0]
+    when 'exist'
+      result_exo = if_exist(file_name)
+    when 'test'
+      if File.exists?(file_name)
+        result_exo = test_file(file_name, data[i][1], data[i][2])[0]
+        the_return = test_file(file_name, data[i][1], data[i][2])[1]
+        expected = test_file(file_name, data[i][1], data[i][2])[2]
+      else
+        result_exo = false
+        the_return = "Impossible d'effectuer le test car le fichier est introuvable"
+        expected = ''
+      end
+    else
+      result_exo = false
+      the_return = "Vous n'avez pas envoyé le type du test (exist ou test)"
+      expected = ''
+    end
+    show(note_table, result_exo, name_exo, i + 1, total_exo + 1, the_return, expected)
+  end
+end
+
+# Execute tous les tests et presente les resultats de ceux-ci
+#
+# @param [String] num_test S'il est vide, tous les tests s'effectueront sinon seule les tests de l'exercice n°/num_test seront effectués
+def my_exercise_result(num_test = '')
   note_table = [0, 0]
 
   # exercice air00

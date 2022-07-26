@@ -9,7 +9,7 @@ def is_numeric char
 end
 def my_quick_sort(list)
   sorted_table = list
-  puts "execution..."
+  puts ""
   sorted_table
 end
 # -------------
