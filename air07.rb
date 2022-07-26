@@ -11,23 +11,25 @@ end
 def sorted_insert(tableau, new_elem)
   sorted_table = []
   is_add = false
-  (0..(tableau.length - 1)).each do |i|
-    if !is_add && i != (tableau.length - 1)
-      if new_elem.to_i <= tableau[i].to_i
+  last_idx = tableau.length - 1
+  (0..last_idx).each do |i|
+    current_elem = tableau[i]
+    if !is_add
+      if current_elem.to_i >= new_elem.to_i
         sorted_table.append(new_elem)
         is_add = true
-      end
-      sorted_table.append(tableau[i])
-    elsif i == (tableau.length - 1)
-      if new_elem.to_i >= tableau[i].to_i
-        sorted_table.append(tableau[i])
-        sorted_table.append(new_elem)
+        sorted_table.append(current_elem)
       else
-        sorted_table.append(new_elem)
-        sorted_table.append(tableau[i])
+        if i == last_idx
+          sorted_table.append(current_elem)
+          sorted_table.append(new_elem)
+          is_add = true
+        else
+          sorted_table.append(current_elem)
+        end
       end
     else
-      sorted_table.append(tableau[i])
+      sorted_table.append(current_elem)
     end
   end
   sorted_table

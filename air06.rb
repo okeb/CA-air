@@ -21,6 +21,11 @@ if ARGV.length < 2
   puts 'erreur'
   exit
 end
+
+if ARGV[-1] == ' ' || ARGV[-1] == '' || ARGV[-1] == nil
+  puts 'erreur'
+  exit
+end
 # -------------
 
 

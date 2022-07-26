@@ -2,7 +2,7 @@
 
 # LES FONCTIONS
 # -------------
-def remove_double(char)
+def remove_double char
   the_sentence = char[0]
   (0..(char.length - 2)).each do |i|
     if char[i] != char[i + 1]

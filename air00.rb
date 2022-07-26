@@ -35,7 +35,7 @@ char = ARGV[0]
 
 # LA RESOLUTION
 # -------------
-list = my_func_split(char, '')
+list = my_func_split(char, ' ')
 # -------------
 
 

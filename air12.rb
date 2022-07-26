@@ -23,7 +23,7 @@ if ARGV.length < 1
 end
 
 (0..(ARGV.length - 1)).each do |i|
-  if !is_numeric(ARGV[i])  && (i != ARGV.index("fusion"))
+  if !is_numeric(ARGV[i])
     puts 'erreur'
     exit
   end

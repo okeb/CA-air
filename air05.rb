@@ -3,6 +3,10 @@
 
 # LES FONCTIONS
 # -------------
+
+def is_numeric char
+  char.match(/\A[+-]?\d+?(_?\d+)*(\.\d+e?\d*)?\Z/) != nil
+end
 def make_operation(tableau, operator)
   new_tableau = []
   (0..(tableau.length - 2)).each do |i|
@@ -23,13 +27,20 @@ if ARGV.length < 2 || (ARGV[-1][0] != '+' && ARGV[-1][0] != '-')
   puts 'erreur'
   exit
 end
+
+(0..(ARGV.length - 1)).each do |x|
+  unless is_numeric ARGV[x]
+    puts 'erreur'
+    exit
+  end
+end
 # -------------
 
 
 # LES DATA
 # -------------
 tableau = ARGV
-operation = ARGV[-1]
+operator = ARGV[-1]
 # -------------
 
 # LA RESOLUTION

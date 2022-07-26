@@ -5,10 +5,10 @@
 # LES FONCTIONS
 # -------------
 def ma_rotation(list)
-  sorted_list = ['start']
-  longueur = list.length
+  sorted_list = []
+  longueur = list.length - 1
   (0..longueur).each do |i|
-    if i != longueur
+    if i != longueur + 1
       sorted_list[(i - 1) % (longueur + 1)] = list[i]
     end
   end
@@ -39,5 +39,5 @@ result = ma_rotation(list)
 
 # RESULTAT(S)
 # -------------
-puts result.join ' '
+puts result.join ', '
 # -------------
